@@ -1,8 +1,11 @@
 import {gql} from 'apollo-server-express';
 
+//get 1 animal by id animal(id: ID!); Animal"
+
 export default gql`
    extend type Query {
-     animals: [Animal]
+     animals: [Animal],
+     animal(id: ID!); Animal
    }
    
    type Animal {
