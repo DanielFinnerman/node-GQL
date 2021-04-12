@@ -1,7 +1,7 @@
 'use strict';
 import passport from 'passport';
 import {Strategy} from 'passport-local';
-// const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 // const userModel = require('../models/user');
 import passportJWT from 'passport-jwt';
 const JWTStrategy = passportJWT.Strategy;
@@ -27,7 +27,11 @@ passport.use(new Strategy(
             // const strippedUser = user.toObject();
             // delete strippedUser.password;
             // console.log('deleted pwd', strippedUser);
-            if (username !== 'foo' || password !== 'bar') {
+
+            //read from database... here a possible hash of 'bar'
+            const pwdFromDB = '$2b$12$/m09NYfWlkBnvz4TimUwTeJpGjcnHRU36b5mO8jg3E2YvbChlGlju';
+            const validate = await bcrypt.compare(password, pwdFromDB);
+            if (username !== 'foo' || !validate) {
                 return done(null, false, {message: 'Incorrect credentials.'});
             }
             const strippedUser = {id: 1, username: 'foo'};
